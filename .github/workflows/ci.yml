@@ -10,8 +10,6 @@ jobs:
         image: dolthub/dolt-sql-server:latest
         ports:
           - 3306:3306
-        env:
-          DOLT_USER: root
     steps:
       - uses: actions/checkout@v4
 
@@ -20,6 +18,19 @@ jobs:
           bun-version: latest
 
       - run: bun install
+
+      - name: Wait for Dolt to accept connections
+        run: |
+          for i in $(seq 1 30); do
+            if mysqladmin ping -h 127.0.0.1 -P 3306 -u root --silent 2>/dev/null; then
+              echo "Dolt is ready"
+              exit 0
+            fi
+            echo "Waiting for Dolt... ($i/30)"
+            sleep 2
+          done
+          echo "Dolt did not become ready in time"
+          exit 1
 
       - run: bun test
         env:
