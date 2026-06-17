@@ -1,0 +1,29 @@
+name: Dolt JSON_LENGTH Bug Repro
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      dolt:
+        image: dolthub/dolt-sql-server:latest
+        ports:
+          - 3306:3306
+        env:
+          DOLT_USER: root
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - run: bun install
+
+      - run: bun test
+        env:
+          DOLT_HOST: 127.0.0.1
+          DOLT_PORT: 3306
+          DOLT_USER: root
+          DOLT_PASS: ""

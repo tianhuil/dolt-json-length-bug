@@ -1,0 +1,14 @@
+{
+  "name": "dolt-json-length-bug",
+  "version": "0.0.0",
+  "scripts": {
+    "test": "bun test"
+  },
+  "dependencies": {
+    "mysql2": "^3.14.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.0",
+    "@types/node": "^22.0.0"
+  }
+}
