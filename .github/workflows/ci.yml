@@ -11,8 +11,7 @@ jobs:
         ports:
           - 3306:3306
         env:
-          DOLT_USER: testuser
-          DOLT_PASSWORD: testpass
+          DOLT_ROOT_HOST: "%"
     steps:
       - uses: actions/checkout@v4
 
@@ -25,7 +24,7 @@ jobs:
       - name: Wait for Dolt to accept connections
         run: |
           for i in $(seq 1 30); do
-            if mysqladmin ping -h 127.0.0.1 -P 3306 -u testuser --password=testpass --silent 2>/dev/null; then
+            if timeout 1 bash -c "cat < /dev/null > /dev/tcp/127.0.0.1/3306" 2>/dev/null; then
               echo "Dolt is ready"
               exit 0
             fi
@@ -39,5 +38,5 @@ jobs:
         env:
           DOLT_HOST: 127.0.0.1
           DOLT_PORT: 3306
-          DOLT_USER: testuser
-          DOLT_PASS: testpass
+          DOLT_USER: root
+          DOLT_PASS: ""
