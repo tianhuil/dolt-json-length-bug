@@ -24,10 +24,10 @@ describe("JSON_LENGTH on Dolt", () => {
     expect(row["len"]).toBeNull();
   });
 
-  test("JSON_LENGTH('{}') returns NULL — BUG: should be 0 per MySQL spec", async () => {
+  test("JSON_LENGTH('{}') returns 0 (correct)", async () => {
     const [rows] = await sharedConn.execute("SELECT JSON_LENGTH('{}') AS len");
     const row = (rows as Record<string, unknown>[])[0];
-    expect(row["len"]).toBeNull();
+    expect(row["len"]).toBe(0);
   });
 
   test("JSON_LENGTH('[1,2,3]') returns 3 (correct)", async () => {
@@ -49,6 +49,8 @@ describe("JSON_LENGTH on Dolt", () => {
   });
 
   test("JSON_LENGTH on table column: empty array returns NULL — BUG", async () => {
+    await sharedConn.execute("CREATE DATABASE IF NOT EXISTS testdb");
+    await sharedConn.execute("USE testdb");
     await sharedConn.execute(
       "CREATE TABLE IF NOT EXISTS test_json_length_bug (id INT PRIMARY KEY, arr JSON)"
     );
