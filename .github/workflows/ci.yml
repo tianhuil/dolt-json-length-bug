@@ -10,6 +10,8 @@ jobs:
         image: dolthub/dolt-sql-server:latest
         ports:
           - 3306:3306
+        env:
+          DOLT_ROOT_PASSWORD: ""
     steps:
       - uses: actions/checkout@v4
 
