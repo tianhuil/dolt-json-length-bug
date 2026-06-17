@@ -36,6 +36,12 @@ describe("JSON_LENGTH on Dolt", () => {
     expect(row["len"]).toBe(3);
   });
 
+  test("JSON_LENGTH('\"string\"') returns 1 per MySQL spec", async () => {
+    const [rows] = await sharedConn.execute('SELECT JSON_LENGTH(\'"string"\') AS len');
+    const row = (rows as Record<string, unknown>[])[0];
+    expect(row["len"]).toBe(1);
+  });
+
   test("JSON_LENGTH(NULL) returns NULL (correct, per MySQL spec)", async () => {
     const [rows] = await sharedConn.execute("SELECT JSON_LENGTH(NULL) AS len");
     const row = (rows as Record<string, unknown>[])[0];

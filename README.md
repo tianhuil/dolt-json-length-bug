@@ -19,4 +19,5 @@ bun test
 | `JSON_LENGTH('[]')` | `0` | `NULL` |
 | `JSON_LENGTH('{}')` | `0` | `NULL` |
 | `JSON_LENGTH('[1,2,3]')` | `3` | `3` |
+| `JSON_LENGTH('"string"')` | `1` | `1` |
 | `JSON_LENGTH(NULL)` | `NULL` | `NULL` |
